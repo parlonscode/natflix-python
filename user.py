@@ -3,10 +3,10 @@ import datetime
 import utils
 
 # TODO: Replace with real existing email addresses
-existing_email_addresses = {"alain@gmail.com", "gilles@yahoo.fr", "arsene@gmail.com"}
+existing_email_addresses = {"honore@gmail.com", "pierre@gmail.com"}
 
 
-def launch_registration_process():
+def register():
     name = None
     while name is None:
         name = input("Veuillez entrer votre nom: ")
@@ -17,7 +17,7 @@ def launch_registration_process():
 
     email = None
     while email is None:
-        email = input("Veuillez entrer votre email: ")
+        email = input("Veuillez entrer votre email: ").lower()
 
         if not utils.is_a_valid_email_address(email):
             print("L'adresse email entrée est invalide!")
@@ -54,8 +54,10 @@ def launch_registration_process():
             "Veuillez entrer votre type d'abonnement - 1 [Régional] ou 2 [International]: "
         )
 
-        if subscription_type not in ('1', '2'):
-            print("Le type d'abonnement doit être 1 pour régional ou 2 pour international.")
+        if subscription_type not in ("1", "2"):
+            print(
+                "Le type d'abonnement doit être 1 pour régional ou 2 pour international."
+            )
             subscription_type = None
 
     password = None
@@ -63,12 +65,26 @@ def launch_registration_process():
         password = input("Veuillez entrer votre mot de passe (min 6 caractères): ")
 
         if len(password) < 6 or password.isspace():
-            print('Le mot de passe doit faire au minimum 6 caractères et ne doit pas contenir que des espaces.')
+            print(
+                "Le mot de passe doit faire au minimum 6 caractères et ne doit pas contenir que des espaces."
+            )
             password = None
 
-    print(f"{name=} {email=} {age=} {country=} {subscription_type=} {password=}")
+    user = {
+        "name": name,
+        "email": email,
+        "age": age,
+        "country": country,
+        "subscription_type": int(subscription_type),
+        "password": password,
+    }
+
+    with open('users.txt', 'a') as f:
+        f.write(f'{name},{email},{age},{country},{subscription_type},{password}\n')
+
+    return user
 
 
-def launch_authentication_process():
+def authenticate():
     # TODO: Authenticate user
     print("Processus d'authentification")

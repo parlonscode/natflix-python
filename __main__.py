@@ -1,3 +1,5 @@
+import sys
+
 import user
 
 
@@ -34,11 +36,12 @@ def main():
     user_choice = display_home_menu_and_retrieve_user_choice()
 
     if user_choice == "1":
-        user.launch_registration_process()
+        user_created = user.register()
+        print(f'User created: {user_created}')
     elif user_choice == "2":
-        user.launch_authentication_process()
+        user.authenticate()
     elif user_choice == "3":
-        print("Bye bye!")
+        sys.exit()
 
 
 if __name__ == "__main__":
