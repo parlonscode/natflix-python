@@ -1,9 +1,24 @@
+import csv
 import datetime
 
 import utils
 
-# TODO: Replace with real existing email addresses
-existing_email_addresses = {"honore@gmail.com", "pierre@gmail.com"}
+existing_users = []
+with open("users.csv", "r") as f:
+    reader = csv.reader(f)
+    for row in reader:
+        existing_users.append(
+            {
+                "name": row[0],
+                "email": row[1],
+                "age": row[2],
+                "pays": row[3],
+                "subscription_type": row[4],
+                "password": row[5],
+            }
+        )
+
+existing_email_addresses = set([user["email"] for user in existing_users])
 
 
 def register():
@@ -79,12 +94,41 @@ def register():
         "password": password,
     }
 
-    with open('users.txt', 'a') as f:
-        f.write(f'{name},{email},{age},{country},{subscription_type},{password}\n')
+    with open("users.csv", "a") as f:
+        writer = csv.writer(f)
+        writer.writerow([name, email, age, country, subscription_type, password])
 
     return user
 
 
 def authenticate():
-    # TODO: Authenticate user
-    print("Processus d'authentification")
+    email = None
+    while email is None:
+        email = input("Veuillez entrer votre email: ").lower()
+
+        if not utils.is_a_valid_email_address(email):
+            print("L'adresse email entrée est invalide!")
+            email = None
+            continue
+
+        if email not in existing_email_addresses:
+            print(
+                "Nous n'avons trouvé aucun utilisateur avec cette adresse email au niveau de notre système."
+            )
+            email = None
+
+    user_found = None
+    for u in existing_users:
+        if u["email"] == email:
+            user_found = u
+            break
+
+    password = None
+    while password is None:
+        password = input("Veuillez entrer votre mot de passe: ")
+
+        if user_found["password"] != password:
+            print("Mot de passe invalide!")
+            password = None
+
+    return user_found

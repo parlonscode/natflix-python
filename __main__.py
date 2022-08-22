@@ -35,13 +35,15 @@ def main():
     display_main_title()
     user_choice = display_home_menu_and_retrieve_user_choice()
 
-    if user_choice == "1":
-        user_created = user.register()
-        print(f'User created: {user_created}')
-    elif user_choice == "2":
-        user.authenticate()
-    elif user_choice == "3":
-        sys.exit()
+    match user_choice:
+        case "1":
+            user_created = user.register()
+            print(f"User created: {user_created}")
+        case "2":
+            authenticated_user = user.authenticate()
+            print(f"Authenticated User: {authenticated_user}")
+        case "3":
+            sys.exit()
 
 
 if __name__ == "__main__":

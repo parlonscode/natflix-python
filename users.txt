@@ -1,2 +1,0 @@
-Honoré,honore@gmail.com,20,Canada,1,secret123
-Pierre,pierre@gmail.com,17,France,2,passer123
