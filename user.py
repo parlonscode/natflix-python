@@ -3,6 +3,9 @@ import datetime
 
 import utils
 
+MIN_AGE = 6
+MAX_AGE = 117
+
 existing_users = []
 with open("users.csv", "r") as f:
     reader = csv.reader(f)
@@ -24,9 +27,9 @@ existing_email_addresses = set([user["email"] for user in existing_users])
 def register():
     name = None
     while name is None:
-        name = input("Veuillez entrer votre nom: ")
+        name = input("Veuillez entrer votre nom: ").strip()
 
-        if name.strip() == "":
+        if name == "":
             print("Le nom ne peut pas être vide.")
             name = None
 
@@ -47,19 +50,21 @@ def register():
         birth_year = input("Veuillez entrer votre année de naissance: ")
 
         if not birth_year.isdigit():
-            print("L'âge doit être un entier positif.")
+            print("L'année doit être un entier positif.")
             birth_year = None
 
-    # TODO: Validate that user's age is between a given interval
-    age = datetime.datetime.now().year - int(birth_year)
+        current_year = datetime.datetime.now().year
+        if not (current_year - MAX_AGE <= int(birth_year) <= current_year - MIN_AGE):
+            print(f"L'année doit être comprise entre {current_year - MAX_AGE} et {current_year - MIN_AGE}")
+            birth_year = None
 
     # TODO: Validate country
     # https://stackoverflow.com/questions/41245330/check-if-a-country-entered-is-one-of-the-countries-of-the-world
     country = None
     while country is None:
-        country = input("Veuillez entrer votre pays: ")
+        country = input("Veuillez entrer votre pays: ").strip()
 
-        if country.strip() == "":
+        if country == "":
             print("Le pays entré est invalide.")
             country = None
 
@@ -88,7 +93,7 @@ def register():
     user = {
         "name": name,
         "email": email,
-        "age": age,
+        "birth_year": int(birth_year),
         "country": country,
         "subscription_type": int(subscription_type),
         "password": password,
@@ -96,7 +101,7 @@ def register():
 
     with open("users.csv", "a") as f:
         writer = csv.writer(f)
-        writer.writerow([name, email, age, country, subscription_type, password])
+        writer.writerow([name, email, birth_year, country, subscription_type, password])
 
     return user
 
