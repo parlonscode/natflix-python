@@ -1,14 +1,13 @@
 import sys
 
 import user
+import settings
 
 
 def display_main_title():
-    TITLE_WIDTH = 80
-
-    print("#" * TITLE_WIDTH)
-    print(f'###{"Bienvenue dans Natflix":^{TITLE_WIDTH - 6}}###')
-    print("#" * TITLE_WIDTH)
+    print("#" * settings.TITLE_WIDTH)
+    print(f'###{"Bienvenue dans Natflix":^{settings.TITLE_WIDTH - 6}}###')
+    print("#" * settings.TITLE_WIDTH)
 
 
 def display_home_menu_and_retrieve_user_choice():

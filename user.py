@@ -2,9 +2,8 @@ import csv
 import datetime
 
 import utils
+import settings
 
-MIN_AGE = 6
-MAX_AGE = 117
 
 existing_users = []
 with open("users.csv", "r") as f:
@@ -54,8 +53,8 @@ def register():
             birth_year = None
 
         current_year = datetime.datetime.now().year
-        if not (current_year - MAX_AGE <= int(birth_year) <= current_year - MIN_AGE):
-            print(f"L'année doit être comprise entre {current_year - MAX_AGE} et {current_year - MIN_AGE}")
+        if not (current_year - settings.MAX_AGE <= int(birth_year) <= current_year - settings.MIN_AGE):
+            print(f"L'année doit être comprise entre {current_year - settings.MAX_AGE} et {current_year - settings.MIN_AGE}")
             birth_year = None
 
     # TODO: Validate country
