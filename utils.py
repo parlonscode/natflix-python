@@ -1,3 +1,4 @@
+import hashlib
 import re
 
 
@@ -6,3 +7,11 @@ def is_a_valid_email_address(email):
         return False
     else:
         return True
+
+
+def hash_password(plain_password):
+    return hashlib.sha512(plain_password.encode()).hexdigest()
+
+
+def verify_password(password_digest, plain_password):
+    return password_digest == hash_password(plain_password)

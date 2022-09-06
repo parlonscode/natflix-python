@@ -1,5 +1,3 @@
-import sys
-
 import user
 import settings
 
@@ -30,19 +28,50 @@ def display_home_menu_and_retrieve_user_choice():
     return choice
 
 
+def display_user_menu_and_retrieve_user_choice():
+    choice = None
+
+    while choice is None:
+        print("Menu Utilisateur")
+        print("1 - Rechercher des films ou séries avec une expression")
+        print("2 - Rechercher des films ou séries selon le genre")
+        print("3 - Rechercher des films ou séries selon les acteurs")
+        print(
+            "4 - Afficher la médiathèque par ordre des shows les plus récemment ajoutés"
+        )
+        print("5 - Afficher la médiathèque par ordre des shows les plus populaires")
+        print("6 - Afficher la médiathèque par ordre des shows les mieux évalués")
+        print("7 - Quitter l'application")
+
+        choice = input("Veuillez entrer votre choix: ")
+
+        if choice not in ("1", "2", "3", "4", "5", "6", "7"):
+            print(
+                "Votre choix n'est pas dans la liste des options. Veuillez réessayer."
+            )
+            choice = None
+
+    return choice
+
+
 def main():
     display_main_title()
     user_choice = display_home_menu_and_retrieve_user_choice()
 
     match user_choice:
         case "1":
-            user_created = user.register()
-            print(f"User created: {user_created}")
+            authenticated_user = user.register()
         case "2":
             authenticated_user = user.authenticate()
-            print(f"Authenticated User: {authenticated_user}")
         case "3":
-            sys.exit()
+            authenticated_user = None
+
+    if authenticated_user is not None:
+        print(
+            f"Salut {authenticated_user['name']}! Tu as accès à 7203 films et séries télés."
+        )
+        user_choice = display_user_menu_and_retrieve_user_choice()
+        print(f"{user_choice=}")
 
 
 if __name__ == "__main__":

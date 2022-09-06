@@ -5,22 +5,26 @@ import utils
 import settings
 
 
-existing_users = []
-with open("users.csv", "r") as f:
-    reader = csv.reader(f)
-    for row in reader:
-        existing_users.append(
-            {
-                "name": row[0],
-                "email": row[1],
-                "age": row[2],
-                "pays": row[3],
-                "subscription_type": row[4],
-                "password": row[5],
-            }
-        )
+def get_existing_users():
+    existing_users = []
+    with open("users.csv", "r") as f:
+        reader = csv.reader(f)
+        for row in reader:
+            existing_users.append(
+                {
+                    "name": row[0],
+                    "email": row[1],
+                    "age": row[2],
+                    "pays": row[3],
+                    "subscription_type": row[4],
+                    "password": row[5],
+                }
+            )
+    return existing_users
 
-existing_email_addresses = set([user["email"] for user in existing_users])
+
+def get_existing_email_addresses():
+    return [user["email"] for user in get_existing_users()]
 
 
 def register():
@@ -39,8 +43,9 @@ def register():
         if not utils.is_a_valid_email_address(email):
             print("L'adresse email entrée est invalide!")
             email = None
+            continue
 
-        if email in existing_email_addresses:
+        if email in get_existing_email_addresses():
             print("Désolé, adresse email déjà utilisée.")
             email = None
 
@@ -53,8 +58,14 @@ def register():
             birth_year = None
 
         current_year = datetime.datetime.now().year
-        if not (current_year - settings.MAX_AGE <= int(birth_year) <= current_year - settings.MIN_AGE):
-            print(f"L'année doit être comprise entre {current_year - settings.MAX_AGE} et {current_year - settings.MIN_AGE}")
+        if not (
+            current_year - settings.MAX_AGE
+            <= int(birth_year)
+            <= current_year - settings.MIN_AGE
+        ):
+            print(
+                f"L'année doit être comprise entre {current_year - settings.MAX_AGE} et {current_year - settings.MIN_AGE}"
+            )
             birth_year = None
 
     # TODO: Validate country
@@ -89,18 +100,22 @@ def register():
             )
             password = None
 
+    password_digest = utils.hash_password(password)
+
     user = {
         "name": name,
         "email": email,
         "birth_year": int(birth_year),
         "country": country,
         "subscription_type": int(subscription_type),
-        "password": password,
+        "password": password_digest,
     }
 
     with open("users.csv", "a") as f:
         writer = csv.writer(f)
-        writer.writerow([name, email, birth_year, country, subscription_type, password])
+        writer.writerow(
+            [name, email, birth_year, country, subscription_type, password_digest]
+        )
 
     return user
 
@@ -115,14 +130,14 @@ def authenticate():
             email = None
             continue
 
-        if email not in existing_email_addresses:
+        if email not in get_existing_email_addresses():
             print(
                 "Nous n'avons trouvé aucun utilisateur avec cette adresse email au niveau de notre système."
             )
             email = None
 
     user_found = None
-    for u in existing_users:
+    for u in get_existing_users():
         if u["email"] == email:
             user_found = u
             break
@@ -131,7 +146,7 @@ def authenticate():
     while password is None:
         password = input("Veuillez entrer votre mot de passe: ")
 
-        if user_found["password"] != password:
+        if not utils.verify_password(user_found["password"], password):
             print("Mot de passe invalide!")
             password = None
 
