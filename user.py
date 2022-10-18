@@ -6,6 +6,7 @@ import settings
 
 
 def get_existing_users():
+    current_year = datetime.datetime.now().year
     existing_users = []
     with open("users.csv", "r") as f:
         reader = csv.reader(f)
@@ -14,9 +15,9 @@ def get_existing_users():
                 {
                     "name": row[0],
                     "email": row[1],
-                    "age": row[2],
-                    "pays": row[3],
-                    "subscription_type": row[4],
+                    "age": current_year - int(row[2]),
+                    "country": row[3],
+                    "subscription_type": int(row[4]),
                     "password": row[5],
                 }
             )

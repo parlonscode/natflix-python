@@ -1,5 +1,6 @@
 import user
 import settings
+import mediatheque
 
 
 def display_main_title():
@@ -55,6 +56,14 @@ def display_user_menu_and_retrieve_user_choice():
 
 
 def main():
+    # shows = mediatheque.load_shows(settings.MEDIA_FILE)
+    # print(len(shows))
+    # shows = mediatheque.filtrer_shows_par_age(shows, 12)
+    # print(len(shows))
+    # # if authenticated_user['subscription_type'] == 1:
+    # if True:
+    #     print('filtrer par pays')
+    # print(shows)
     display_main_title()
     user_choice = display_home_menu_and_retrieve_user_choice()
 
@@ -67,8 +76,15 @@ def main():
             authenticated_user = None
 
     if authenticated_user is not None:
+        shows = mediatheque.load_shows(settings.MEDIA_FILE)
+        shows = mediatheque.filter_shows_by_age(shows, authenticated_user['age'])
+
+        # Si l'utilisateur a un abonnement régional
+        if authenticated_user['subscription_type'] == 1:
+            shows = mediatheque.filter_shows_by_country(shows, authenticated_user['country'])
+
         print(
-            f"Salut {authenticated_user['name']}! Tu as accès à 7203 films et séries télés."
+            f"Salut {authenticated_user['name']}! Tu as accès à {len(shows)} films et séries télés."
         )
         user_choice = display_user_menu_and_retrieve_user_choice()
         print(f"{user_choice=}")
