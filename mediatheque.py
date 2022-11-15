@@ -22,14 +22,25 @@ MIN_AGE_PER_RATING = {
 
 
 def load_shows(media_file):
-    with open(media_file, 'r') as f:
-        reader = csv.DictReader(f, delimiter='|')
+    with open(media_file, "r") as f:
+        reader = csv.DictReader(f, delimiter="|")
         return [show for show in reader]
 
 
 def filter_shows_by_age(shows, user_age):
-    return [show for show in shows if user_age >= MIN_AGE_PER_RATING[show['classement']]]
+    return [
+        show for show in shows if user_age >= MIN_AGE_PER_RATING[show["classement"]]
+    ]
 
 
 def filter_shows_by_country(shows, user_country):
-    return [show for show in shows if user_country.lower() == show['pays'].lower()]
+    return [show for show in shows if user_country.lower() == show["pays"].lower()]
+
+
+def filter_shows_by_title_or_description(shows, expression):
+    return [
+        show
+        for show in shows
+        if expression.lower() in show["titre"].lower()
+        or expression.lower() in show["description"].lower()
+    ]

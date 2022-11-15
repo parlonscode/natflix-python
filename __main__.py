@@ -56,38 +56,51 @@ def display_user_menu_and_retrieve_user_choice():
 
 
 def main():
-    # shows = mediatheque.load_shows(settings.MEDIA_FILE)
-    # print(len(shows))
-    # shows = mediatheque.filtrer_shows_par_age(shows, 12)
-    # print(len(shows))
-    # # if authenticated_user['subscription_type'] == 1:
-    # if True:
-    #     print('filtrer par pays')
-    # print(shows)
     display_main_title()
-    user_choice = display_home_menu_and_retrieve_user_choice()
-
-    match user_choice:
-        case "1":
-            authenticated_user = user.register()
-        case "2":
-            authenticated_user = user.authenticate()
-        case "3":
-            authenticated_user = None
+    # user_choice = display_home_menu_and_retrieve_user_choice()
+    #
+    # match user_choice:
+    #     case "1":
+    #         authenticated_user = user.register()
+    #     case "2":
+    #         authenticated_user = user.authenticate()
+    #         print(authenticated_user)
+    #     case "3":
+    #         authenticated_user = None
+    authenticated_user = {'name': 'Gilles', 'email': 'gilles@gmail.com', 'age': 105, 'country': 'France', 'subscription_type': 2, 'password': '348735696e74c45e7fbf9c6839d87f891486d19e5059db7e397d5086e486dc0051a533752805dc9288463673f0a6fcbf2a655548738a85305b2d571bae44a71e'}
 
     if authenticated_user is not None:
         shows = mediatheque.load_shows(settings.MEDIA_FILE)
-        shows = mediatheque.filter_shows_by_age(shows, authenticated_user['age'])
+        shows = mediatheque.filter_shows_by_age(shows, authenticated_user["age"])
 
         # Si l'utilisateur a un abonnement régional
-        if authenticated_user['subscription_type'] == 1:
-            shows = mediatheque.filter_shows_by_country(shows, authenticated_user['country'])
+        if authenticated_user["subscription_type"] == 1:
+            shows = mediatheque.filter_shows_by_country(
+                shows, authenticated_user["country"]
+            )
 
         print(
             f"Salut {authenticated_user['name']}! Tu as accès à {len(shows)} films et séries télés."
         )
         user_choice = display_user_menu_and_retrieve_user_choice()
-        print(f"{user_choice=}")
+
+        if user_choice == "1":
+            expression_to_search = input("Veuillez entrer l'expression à rechercher: ")
+            shows_found = mediatheque.filter_shows_by_title_or_description(
+                shows, expression_to_search
+            )
+            print(shows_found)
+            print(f"{len(shows_found)} résultats trouvés.")
+            # TODO: Add pagination here
+        elif user_choice == "2":
+            print("Catégories disponibles:")
+            categories = []
+            for show in shows:
+                categories += show['categories'].split(', ')
+
+            categories = sorted(set(categories))
+            for index, category in enumerate(categories, start=1):
+                print(f'{index:>2} - {category}')
 
 
 if __name__ == "__main__":
