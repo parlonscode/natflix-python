@@ -67,7 +67,14 @@ def main():
     #         print(authenticated_user)
     #     case "3":
     #         authenticated_user = None
-    authenticated_user = {'name': 'Gilles', 'email': 'gilles@gmail.com', 'age': 105, 'country': 'France', 'subscription_type': 2, 'password': '348735696e74c45e7fbf9c6839d87f891486d19e5059db7e397d5086e486dc0051a533752805dc9288463673f0a6fcbf2a655548738a85305b2d571bae44a71e'}
+    authenticated_user = {
+        "name": "Gilles",
+        "email": "gilles@gmail.com",
+        "age": 105,
+        "country": "France",
+        "subscription_type": 2,
+        "password": "348735696e74c45e7fbf9c6839d87f891486d19e5059db7e397d5086e486dc0051a533752805dc9288463673f0a6fcbf2a655548738a85305b2d571bae44a71e",
+    }
 
     if authenticated_user is not None:
         shows = mediatheque.load_shows(settings.MEDIA_FILE)
@@ -96,11 +103,13 @@ def main():
             print("Catégories disponibles:")
             categories = []
             for show in shows:
-                categories += show['categories'].split(', ')
+                if show["categories"].strip() != "":
+                    categories += show["categories"].split(", ")
 
             categories = sorted(set(categories))
+            print(categories)
             for index, category in enumerate(categories, start=1):
-                print(f'{index:>2} - {category}')
+                print(f"{index:>2} - {category}")
 
 
 if __name__ == "__main__":
