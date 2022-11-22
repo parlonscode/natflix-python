@@ -24,7 +24,30 @@ MIN_AGE_PER_RATING = {
 def load_shows(media_file):
     with open(media_file, "r") as f:
         reader = csv.DictReader(f, delimiter="|")
-        return [show for show in reader]
+
+        shows = []
+
+        for show in reader:
+            show["pays"] = (
+                [] if show["pays"].strip() == "" else show["pays"].split(", ")
+            )
+            show["acteurs"] = (
+                [] if show["acteurs"].strip() == "" else show["acteurs"].split(", ")
+            )
+            show["directeurs"] = (
+                []
+                if show["directeurs"].strip() == ""
+                else show["directeurs"].split(", ")
+            )
+            show["categories"] = (
+                []
+                if show["categories"].strip() == ""
+                else show["categories"].split(", ")
+            )
+
+            shows.append(show)
+
+        return shows
 
 
 def filter_shows_by_age(shows, user_age):

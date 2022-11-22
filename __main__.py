@@ -103,8 +103,8 @@ def main():
             print("Catégories disponibles:")
             categories = []
             for show in shows:
-                if show["categories"].strip() != "":
-                    categories += show["categories"].split(", ")
+                print(show)
+                categories += show["categories"]
 
             categories = sorted(set(categories))
             print(categories)
