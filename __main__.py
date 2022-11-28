@@ -57,24 +57,24 @@ def display_user_menu_and_retrieve_user_choice():
 
 def main():
     display_main_title()
-    # user_choice = display_home_menu_and_retrieve_user_choice()
-    #
-    # match user_choice:
-    #     case "1":
-    #         authenticated_user = user.register()
-    #     case "2":
-    #         authenticated_user = user.authenticate()
-    #         print(authenticated_user)
-    #     case "3":
-    #         authenticated_user = None
-    authenticated_user = {
-        "name": "Gilles",
-        "email": "gilles@gmail.com",
-        "age": 105,
-        "country": "France",
-        "subscription_type": 2,
-        "password": "348735696e74c45e7fbf9c6839d87f891486d19e5059db7e397d5086e486dc0051a533752805dc9288463673f0a6fcbf2a655548738a85305b2d571bae44a71e",
-    }
+    user_choice = display_home_menu_and_retrieve_user_choice()
+
+    match user_choice:
+        case "1":
+            authenticated_user = user.register()
+        case "2":
+            authenticated_user = user.authenticate()
+            print(authenticated_user)
+        case "3":
+            authenticated_user = None
+    # authenticated_user = {
+    #     "name": "Gilles",
+    #     "email": "gilles@gmail.com",
+    #     "age": 105,
+    #     "country": "France",
+    #     "subscription_type": 1,
+    #     "password": "348735696e74c45e7fbf9c6839d87f891486d19e5059db7e397d5086e486dc0051a533752805dc9288463673f0a6fcbf2a655548738a85305b2d571bae44a71e",
+    # }
 
     if authenticated_user is not None:
         shows = mediatheque.load_shows(settings.MEDIA_FILE)
@@ -103,7 +103,7 @@ def main():
             print("Catégories disponibles:")
             categories = []
             for show in shows:
-                print(show)
+                # print(show)
                 categories += show["categories"]
 
             categories = sorted(set(categories))

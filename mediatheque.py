@@ -57,7 +57,16 @@ def filter_shows_by_age(shows, user_age):
 
 
 def filter_shows_by_country(shows, user_country):
-    return [show for show in shows if user_country.lower() == show["pays"].lower()]
+    shows_found = []
+
+    for show in shows:
+        country_list = [country.lower() for country in show["pays"]]
+
+        if user_country.lower() in country_list:
+            shows_found.append(show)
+
+    return shows_found
+    # return [show for show in shows if user_country.lower() in show["pays"]]
 
 
 def filter_shows_by_title_or_description(shows, expression):
