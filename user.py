@@ -29,6 +29,8 @@ def get_existing_email_addresses():
 
 
 def register():
+    current_year = datetime.datetime.now().year
+
     name = None
     while name is None:
         name = input("Veuillez entrer votre nom: ").strip()
@@ -58,7 +60,6 @@ def register():
             print("L'année doit être un entier positif.")
             birth_year = None
 
-        current_year = datetime.datetime.now().year
         if not (
             current_year - settings.MAX_AGE
             <= int(birth_year)
@@ -106,7 +107,7 @@ def register():
     user = {
         "name": name,
         "email": email,
-        "birth_year": int(birth_year),
+        "age": current_year - int(birth_year),
         "country": country,
         "subscription_type": int(subscription_type),
         "password": password_digest,
